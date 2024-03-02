@@ -24,11 +24,11 @@ The labs were completed as a part of the Computer Security course at University 
 
 1. **Buffer Overflow Vulnerability**
 
-2. **Secret Key Encryption Lab **
+2. **Secret Key Encryption Lab**
 > 
-3. **RSA Public-Key Encryption and Signature Lab **
+3. **RSA Public-Key Encryption and Signature Lab**
 
-4. **Heartbleed Attack Lab **
+4. **Heartbleed Attack Lab**
 
 ## References
 
