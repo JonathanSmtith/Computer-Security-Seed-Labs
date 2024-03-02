@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <openssl/bn.h>
+#define NBITS 256
+
+void printBN(char *msg, BIGNUM * a)
+{
+	// Convert the BIGNUM to number string
+	char*number_str = BN_bn2hex(a);
+
+	// Print out the number string
+	printf("%s %s\n", msg, number_str);
+
+	// Free the dynamically allocated memory
+	OPENSSL_free(number_str);
+}
+
+void generatePrivateKey(){
+
+	//initalize all BIGNUMs needed
+	BN_CTX *ctx = BN_CTX_new();
+	BIGNUM *n = BN_new();
+	BIGNUM *p = BN_new();
+	BIGNUM *q = BN_new();
+	BIGNUM *e = BN_new();
+	BIGNUM *tt = BN_new();
+	BIGNUM *pMinusOne = BN_new();
+	BIGNUM *qMinusOne = BN_new();
+	BIGNUM *one = BN_new();
+	BIGNUM *d = BN_new();
+	
+	//hardcode given p,q, and e values
+	BN_hex2bn(&p,"F7E75FDC469067FFDC4E847C51F452DF");
+	BN_hex2bn(&q,"E85CED54AF57E53E092113E62F436F4F");
+	BN_hex2bn(&e,"0D88C3");
+	
+	//compute n = p*q
+	BN_mul(n, p, q, ctx);
+
+	//compute totient = (p-one)(q-one)
+	BN_hex2bn(&one, "1");
+	BN_sub(pMinusOne, p, one);
+	BN_sub(qMinusOne, q, one);
+	BN_mul(tt, pMinusOne, qMinusOne, ctx);
+
+	//compute private key
+	BN_mod_inverse(d, e, tt, ctx);
+	printBN("Private Key (d) = ", d);
+}
+
+int main(){
+	generatePrivateKey();
+}

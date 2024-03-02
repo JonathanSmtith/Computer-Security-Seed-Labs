@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <openssl/bn.h>
+#define NBITS 256
+
+void printBN(char *msg, BIGNUM * a)
+{
+	// Convert the BIGNUM to number string
+	char*number_str = BN_bn2hex(a);
+
+	// Print out the number string
+	printf("%s %s\n", msg, number_str);
+
+	// Free the dynamically allocated memory
+	OPENSSL_free(number_str);
+}
+
+void signature(){
+
+	//initalize all BIGNUMs needed
+	BN_CTX *ctx = BN_CTX_new();
+	BIGNUM *m = BN_new();
+	BIGNUM *d = BN_new();
+	BIGNUM *n = BN_new();
+	BIGNUM *signature = BN_new();;
+	
+	//hardcode given values
+	BN_hex2bn(&m,"49206f776520796f752024333030302e");
+	BN_hex2bn(&d,"74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D");
+	BN_hex2bn(&n,"DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5");
+	
+	//calculate and print signature = M^d mod(n)
+	BN_mod_exp(signature, m, d, n, ctx);
+	printBN("Signature = ", signature);
+
+}
+
+int main(){
+	signature();
+}
